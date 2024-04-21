@@ -16,20 +16,35 @@
 //
 // Execute `rustlings hint quiz3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+trait MyShow {
+    fn print(&self)->String;
+}
 
+impl MyShow for ReportCard{
+    fn print(&self)->String{
+        format!("{} ({}) - achieved a grade of {}",
+        &self.student_name, &self.student_age, &self.grade)
+    }
+}
 pub struct ReportCard {
     pub grade: f32,
     pub student_name: String,
     pub student_age: u8,
 }
 
-impl ReportCard {
-    pub fn print(&self) -> String {
+pub struct ReportCardAlph {
+    pub grade: String,
+    pub student_name: String,
+    pub student_age: u8,
+}
+
+impl MyShow for ReportCardAlph{
+    fn print(&self)->String{
         format!("{} ({}) - achieved a grade of {}",
-            &self.student_name, &self.student_age, &self.grade)
+        &self.student_name, &self.student_age, &self.grade)
     }
 }
+
 
 #[cfg(test)]
 mod tests {
@@ -51,8 +66,8 @@ mod tests {
     #[test]
     fn generate_alphabetic_report_card() {
         // TODO: Make sure to change the grade here after you finish the exercise.
-        let report_card = ReportCard {
-            grade: 2.1,
+        let report_card = ReportCardAlph {
+            grade: "A+".into(),
             student_name: "Gary Plotter".to_string(),
             student_age: 11,
         };

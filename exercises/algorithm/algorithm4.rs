@@ -3,9 +3,9 @@
 	This problem requires you to implement a basic interface for a binary tree
 */
 
-//I AM NOT DONE
 use std::cmp::Ordering;
 use std::fmt::Debug;
+use std::io::SeekFrom;
 
 
 #[derive(Debug)]
@@ -41,7 +41,7 @@ where
 
 impl<T> BinarySearchTree<T>
 where
-    T: Ord,
+    T: Ord+std::fmt::Display,
 {
 
     fn new() -> Self {
@@ -51,12 +51,29 @@ where
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
         //TODO
+        match self.root.as_mut(){
+            Some(root)=> root.insert(value),
+            None=>self.root = Some(Box::<TreeNode<T>>::new(TreeNode::new(value)))   
+        }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
         //TODO
-        true
+        let mut cmp_node =  self.root.as_ref();
+        while cmp_node.is_some(){
+            println!("compare {},{}",cmp_node.unwrap().value,value);
+            if cmp_node.unwrap().value > value{
+                cmp_node = cmp_node.unwrap().left.as_ref();
+            }
+            else if cmp_node.unwrap().value < value{
+                cmp_node = cmp_node.unwrap().right.as_ref();
+            }
+            else{
+                return true;
+            }
+        }
+        false
     }
 }
 
@@ -67,6 +84,25 @@ where
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
         //TODO
+        if self.value > value{
+            if let Some(left) = self.left.as_mut(){
+                left.insert(value);
+            }
+            else{
+                self.left = Some(Box::<TreeNode<T>>::new(TreeNode::new(value)));
+            }
+        }
+        else if self.value < value{
+            if let Some(right) = self.right.as_mut(){
+                right.insert(value);
+            }
+            else {
+                self.right = Some(Box::<TreeNode<T>>::new(TreeNode::new(value)));
+            }
+        }
+        else{
+            return;
+        }
     }
 }
 

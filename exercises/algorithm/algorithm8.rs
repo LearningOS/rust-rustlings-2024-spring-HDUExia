@@ -2,8 +2,9 @@
 	queue
 	This question requires you to use queues to implement the functionality of the stac
 */
-// I AM NOT DONE
 
+use std::i32;
+// use std::{i32, marker::Unsize};
 #[derive(Debug)]
 pub struct Queue<T> {
     elements: Vec<T>,
@@ -56,26 +57,65 @@ pub struct myStack<T>
 {
 	//TODO
 	q1:Queue<T>,
-	q2:Queue<T>
+	q2:Queue<T>,
+    q1_store:bool,
+    length:u32
 }
-impl<T> myStack<T> {
+impl<T:std::marker::Copy> myStack<T> {
     pub fn new() -> Self {
         Self {
 			//TODO
 			q1:Queue::<T>::new(),
-			q2:Queue::<T>::new()
+			q2:Queue::<T>::new(),
+            q1_store: false,
+            length:0
         }
     }
     pub fn push(&mut self, elem: T) {
         //TODO
+        if self.q1_store{
+            self.q1.enqueue(elem);
+        }
+        else{
+            self.q2.enqueue(elem);
+        }
+        self.length+=1;
+        
     }
     pub fn pop(&mut self) -> Result<T, &str> {
-        //TODO
-		Err("Stack is empty")
+        // TODO
+        if self.length>0{
+            self.length-=1;
+        }
+        if self.q1_store&&(!self.q1.is_empty()){
+            for _ in 0..self.length{
+                let data = self.q1.dequeue().unwrap();
+                self.q2.enqueue(data.clone());
+            }
+            self.q1_store = false;
+            self.q1.dequeue()
+        }
+        else if (!self.q1_store)&&(!self.q2.is_empty()){
+            for _ in 0..self.length{
+                let data = self.q2.dequeue().unwrap();
+                self.q1.enqueue(data.clone());
+            }
+            self.q1_store = true;
+            self.q2.dequeue()
+        }
+        else{
+            self.q1_store = true;
+            Err("Stack is empty")
+        }
     }
     pub fn is_empty(&self) -> bool {
 		//TODO
-        true
+        if self.q1.is_empty()&&self.q2.is_empty(){
+            true
+        }
+        else{
+            false
+        }
     }
 }
 
